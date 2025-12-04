@@ -1,8 +1,8 @@
 @import url(/static/style/adaptation.css);
 
 @font-face {
-  font-family: 'VT323';
-  src: url(/static/font/VT323.ttf) format('truetype');
+  font-family: "VT323";
+  src: url(/static/font/VT323.ttf) format("truetype");
 }
 
 :root {
@@ -22,11 +22,12 @@
   --color-10: #c3d194;
   --color-11: #a0ad7b;
   --color-12: #6c7b42;
-  --font: 'VT323', monospace;
+  --font: "VT323", monospace;
   --font-size: 1.2rem;
 }
 
-body, html {
+body,
+html {
   padding: 0;
   margin: 0;
   color: var(--foreground);
@@ -36,7 +37,9 @@ body, html {
   font-size: var(--font-size);
 }
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   box-sizing: border-box;
 }
 
@@ -62,7 +65,11 @@ main {
   padding: 1em;
 }
 
-h1, h2, h3, ul, p {
+h1,
+h2,
+h3,
+ul,
+p {
   padding: 0;
   margin: 0;
 }
@@ -80,7 +87,8 @@ ul {
   margin-left: 1.5em;
 }
 
-h2, h3 {
+h2,
+h3 {
   margin-top: 10px;
   margin-bottom: 5px;
 }
@@ -106,7 +114,8 @@ html.unauthorized .mood {
   pointer-events: none;
 }
 
-button, input[type=submit] {
+button,
+input[type="submit"] {
   width: 100%;
   display: block;
   font-family: var(--font);
@@ -122,23 +131,29 @@ button, input[type=submit] {
   padding: 4px;
 }
 
-button:disabled, input[type=submit]:disabled {
+button:disabled,
+input[type="submit"]:disabled {
   pointer-events: none;
   opacity: 0.5;
 }
 
-button:hover, input[type=submit]:hover,
-button:focus, input[type=submit]:focus {
+button:hover,
+input[type="submit"]:hover,
+button:focus,
+input[type="submit"]:focus {
   border-color: var(--foreground);
 }
 
-button.danger, input[type=submit].danger {
+button.danger,
+input[type="submit"].danger {
   color: #fd5757;
   border-color: #fd5757;
 }
 
-button.danger:hover, input[type=submit].danger:hover,
-button.danger:focus, input[type=submit].danger:focus {
+button.danger:hover,
+input[type="submit"].danger:hover,
+button.danger:focus,
+input[type="submit"].danger:focus {
   border-color: #ff9999;
   color: #ff9999;
 }
@@ -181,7 +196,7 @@ button.danger:focus, input[type=submit].danger:focus {
   border: 1px solid #000;
   word-break: break-word;
   text-align: center;
-  line-height: .8em;
+  line-height: 0.8em;
 }
 
 #dot {
@@ -230,7 +245,8 @@ label {
   user-select: none;
 }
 
-input[type=text], input[type=password] {
+input[type="text"],
+input[type="password"] {
   width: 100%;
   font-family: var(--font);
   font-variant-ligatures: none;
@@ -244,12 +260,14 @@ input[type=text], input[type=password] {
   padding: 4px;
 }
 
-input[type=text]:hover, input[type=password]:hover,
-input[type=text]:focus, input[type=password]:focus {
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="text"]:focus,
+input[type="password"]:focus {
   border-color: var(--foreground);
 }
 
-input[type=text]:invalid {
+input[type="text"]:invalid {
   border-color: #ee5858;
 }
 
@@ -286,12 +304,19 @@ hr {
 }
 
 .gradient {
-  background-image: linear-gradient(90deg, var(--color-3), var(--color-4), var(--color-5), var(--color-4), var(--color-3));
+  background-image: linear-gradient(
+    90deg,
+    var(--color-3),
+    var(--color-4),
+    var(--color-5),
+    var(--color-4),
+    var(--color-3)
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient 30s linear infinite;
-  transition: .5s filter;
+  transition: 0.5s filter;
   text-decoration: none;
 }
 
@@ -319,7 +344,8 @@ hr {
   display: block;
 }
 
-#status_error:empty, #status_warn:empty {
+#status_error:empty,
+#status_warn:empty {
   margin: 0;
 }
 
@@ -363,7 +389,7 @@ hr {
   margin: 0;
   text-decoration: none;
   border-bottom: 3px solid #444;
-  transition: .2s border-color;
+  transition: 0.2s border-color;
 }
 
 .settings_nav li:hover a {
@@ -396,7 +422,7 @@ hr {
   grid-auto-columns: max-content;
   user-select: none;
   font-size: 0.8em;
-  gap: 0
+  gap: 0;
 }
 
 .mood_chart_config > div {
@@ -416,7 +442,11 @@ hr {
   max-width: 94px;
   height: 94px;
   background-color: var(--color);
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+  background-image: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6)
+  );
   color: #fff;
   display: grid;
   user-select: none;
@@ -427,17 +457,17 @@ hr {
   text-align: center;
   font-size: 1em;
   outline: none;
-  line-height: .8em;
+  line-height: 0.8em;
 }
 
-.mood_chart_config input[type=color]:hover,
+.mood_chart_config input[type="color"]:hover,
 .mood_chart_config > div > div:focus,
 .mood_chart_config > div > div:hover {
   outline: 1px solid #fff;
   border-color: #fff;
 }
 
-.mood_chart_config input[type=color] {
+.mood_chart_config input[type="color"] {
   border: 1px solid #000;
   outline: none;
   width: 100%;
@@ -458,7 +488,10 @@ hr {
   position: absolute;
   background: rgba(0, 0, 0, 0.65);
   transform: translate(-50%, -50%);
-  transition: top .2s ease-out 0s, left .2s ease-out 0s, opacity .2s;
+  transition:
+    top 0.2s ease-out 0s,
+    left 0.2s ease-out 0s,
+    opacity 0.2s;
   opacity: 0;
   pointer-events: none;
   white-space: pre;
@@ -469,7 +502,8 @@ hr {
   padding: 8px;
 }
 
-#app_list, #authed_apps {
+#app_list,
+#authed_apps {
   padding: 2px;
   margin: 0;
   list-style: none;
@@ -508,7 +542,7 @@ hr {
 .permissions li::before {
   content: "✔";
   color: #76bd61;
-  margin: 0 .4em;
+  margin: 0 0.4em;
 }
 
 #authed_apps div {
@@ -538,7 +572,7 @@ hr {
 }
 
 #app_copy_id {
-  transition: .2s color;
+  transition: 0.2s color;
 }
 
 #app_id {
@@ -613,7 +647,8 @@ a.dev {
   opacity: 0.7;
 }
 
-select, input[type=date] {
+select,
+input[type="date"] {
   font-family: var(--font);
   font-size: 1em;
   padding: 4px;
@@ -624,7 +659,8 @@ select, input[type=date] {
   outline: none;
 }
 
-select.smaller, input[type=date].smaller {
+select.smaller,
+input[type="date"].smaller {
   font-family: unset;
   font-size: 1rem;
   padding: 1px;
@@ -637,7 +673,7 @@ select option {
 .activity_graph {
   display: grid;
   padding: 4px;
-  margin: .5em 0;
+  margin: 0.5em 0;
   justify-content: center;
   grid-auto-flow: column;
   grid-template-rows: repeat(7, max-content);
@@ -661,7 +697,15 @@ select option {
   opacity: 1;
 }
 
-.ag.level-1 { background: #0e4429; }
-.ag.level-2 { background: #006d32; }
-.ag.level-3 { background: #26a641; }
-.ag.level-4 { background: #39d353; }
+.ag.level-1 {
+  background: #0e4429;
+}
+.ag.level-2 {
+  background: #006d32;
+}
+.ag.level-3 {
+  background: #26a641;
+}
+.ag.level-4 {
+  background: #39d353;
+}
