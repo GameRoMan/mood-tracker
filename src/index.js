@@ -21,6 +21,6 @@ router.use((req, res, next) => res.status(404).render("pages/error/404"));
 router.use((err, req, res, next) => {
   console.error(err);
   res.status(500).render("pages/error/500", {
-    comment: errorComments[Math.floor(Math.random() * errorComments.length)]
+    comment: errorComments[Math.floor(Math.random() * errorComments.length)],
   });
 });
