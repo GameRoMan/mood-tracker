@@ -1,4 +1,3 @@
-import errorComments from "../../../data/error-comments.json" assert { type: "json" };
 import express from "express";
 
 import { router as metricsRouter } from "./routers/prometheus.js";
@@ -22,9 +21,5 @@ router.use((req, res) => {
 
 router.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).json({
-    status: "error",
-    message: "Internal server error",
-    comment: errorComments[Math.floor(Math.random() * errorComments.length)],
-  });
+  res.status(500);
 });

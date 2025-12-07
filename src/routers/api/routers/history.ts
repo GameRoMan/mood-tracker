@@ -1,5 +1,5 @@
-import { auth, validateBody, validateQuery } from "../util.js";
-import { exec$ } from "../../../db.js";
+import { auth, validateBody, validateQuery } from "../util";
+import { exec$ } from "~/lib/db";
 import express from "express";
 import bcrypt from "bcrypt";
 import { z } from "zod";
@@ -66,9 +66,7 @@ router.delete(
 
     await exec$("delete from mood where user_id=$1", [req.user.id]);
 
-    res.json({
-      status: "ok",
-    });
+    return res.json({ status: "ok" });
   },
 );
 
@@ -124,14 +122,14 @@ router.get(
     }));
 
     if (req.query.minimized == "true") {
-      res.json({
+      return res.json({
         status: " ok",
         entries: entries.map((x) => [x.timestamp, x.pleasantness, x.energy]),
         total: req.user.stats_mood_sets,
         pages: pages,
       });
     } else {
-      res.json({
+      return res.json({
         status: "ok",
         entries,
         total: req.user.stats_mood_sets,

@@ -3,10 +3,6 @@
 <head>
   <% locals.title = "Register" %>
   <%- include('../../partials/head') %>
-
-  <% if (turnstile_site_key) { %>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <% } %>
 </head>
 <body>
   <main>
@@ -26,10 +22,6 @@
       <input name="password" id="password" type="password" placeholder="Password" required>
 
       <p id="status_error"><%= locals.error || "" %></p>
-
-      <% if (turnstile_site_key) { %>
-        <div class="cf-turnstile" data-sitekey="<%= turnstile_site_key %>"></div>
-      <% } %>
 
       <input type="checkbox" id="confirm_privacy_policy" name="confirm_privacy_policy" required>
       <label for="confirm_privacy_policy">I have read and agree to the <a href="/privacy">Privacy Policy</a></label>

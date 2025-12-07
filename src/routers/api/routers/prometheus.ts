@@ -1,5 +1,5 @@
-import { fetchMood } from "../../../util.js";
-import { exec$ } from "../../../db.js";
+import { fetchMood } from "~/lib/util";
+import { exec$ } from "~/lib/db";
 import express from "express";
 
 export const router = express.Router();

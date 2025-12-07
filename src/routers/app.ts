@@ -1,7 +1,7 @@
-import { DEFAULT_MOODS, DEFAULT_COLORS } from "../const.js";
-import { exec$, fetch$ } from "../db.js";
-import { fetchMood } from "../util.js";
-import { getAuth } from "./auth.js";
+import { DEFAULT_MOODS, DEFAULT_COLORS } from "~/lib/constants";
+import { exec$, fetch$ } from "~/lib/db";
+import { fetchMood } from "~/lib/util";
+import { getAuth } from "./auth";
 import express from "express";
 
 export const router = express.Router();

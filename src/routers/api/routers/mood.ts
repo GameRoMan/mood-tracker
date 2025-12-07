@@ -1,6 +1,6 @@
 import { auth, validateBody } from "../util.js";
-import { exec$, fetch$ } from "../../../db.js";
-import { fetchMood } from "../../../util.js";
+import { exec$, fetch$ } from "~/lib/db";
+import { fetchMood } from "~/lib/util";
 import express from "express";
 import { z } from "zod";
 
