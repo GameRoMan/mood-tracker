@@ -1,4 +1,4 @@
-import { DEFAULT_COLORS, DEFAULT_MOODS, OAUTH_SCOPES } from "../const.js";
+import { DEFAULT_COLORS, DEFAULT_MOODS, OAUTH_SCOPES } from "~/lib/constants";
 import { validateBody } from "./api/util.js";
 import { exec$, fetch$ } from "../db.js";
 import { createId } from "../util.js";

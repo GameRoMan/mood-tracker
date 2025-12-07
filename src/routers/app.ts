@@ -89,6 +89,5 @@ router.get("/mydata", getAuth(true), async (req, res) => {
 });
 
 router.get("/500", (req, res) => {
-  // easter egg
   res.status(500).render("pages/error/500");
 });
