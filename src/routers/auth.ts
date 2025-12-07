@@ -24,116 +24,114 @@ export function getAuth(required = false) {
   };
 }
 
-export const router = new Elysia({ prefix: "/auth" });
+export const router = new Elysia({ prefix: "/auth" })
+  .get("/login", (req, res) => res.render("pages/auth/login"))
+  .get("/register", (req, res) => res.render("pages/auth/register"))
+  .get("/logout", (req, res) => {
+    res.clearCookie("token").redirect("/");
+  })
+  .post("/login", async (req, res) => {
+    if (
+      typeof req.body.username != "string" ||
+      typeof req.body.password != "string"
+    )
+      return res.status(400).send("Bad Request");
 
-router.get("/login", (req, res) => res.render("pages/auth/login"));
-router.get("/register", (req, res) => res.render("pages/auth/register"));
+    const user = await fetch$("select * from users where username=$1", [
+      req.body.username,
+    ]);
 
-router.get("/logout", (req, res) => {
-  res.clearCookie("token").redirect("/");
-});
+    if (
+      !user ||
+      !(await bcrypt.compare(req.body.password, user.password_hash))
+    ) {
+      return res.status(403).render("pages/auth/login", {
+        error: "Invalid username or password",
+      });
+    }
 
-router.post("/login", async (req, res) => {
-  if (
-    typeof req.body.username != "string" ||
-    typeof req.body.password != "string"
-  )
-    return res.status(400).send("Bad Request");
+    res
+      .cookie("token", user.token, {
+        maxAge: 365 * 24 * 3600 * 1000,
+      })
+      .redirect("/");
+  })
+  .post("/register", async (req, res) => {
+    if (
+      typeof req.body.username != "string" ||
+      typeof req.body.password != "string"
+    ) {
+      return res.status(400).send("Bad Request");
+    }
 
-  const user = await fetch$("select * from users where username=$1", [
-    req.body.username,
-  ]);
+    if (!req.body.username.match(/^[a-z0-9_-]{3,32}$/)) {
+      return res.status(400).render("pages/auth/register", {
+        error: "Username validation failed",
+      });
+    }
 
-  if (!user || !(await bcrypt.compare(req.body.password, user.password_hash))) {
-    return res.status(403).render("pages/auth/login", {
-      error: "Invalid username or password",
-    });
-  }
+    if (config.blacklisted_usernames.includes(req.body.username)) {
+      return res.status(400).render("pages/auth/register", {
+        error: "You cannot use that username",
+      });
+    }
 
-  res
-    .cookie("token", user.token, {
-      maxAge: 365 * 24 * 3600 * 1000,
-    })
-    .redirect("/");
-});
+    if (
+      await fetch$("select 1 from users where username=$1", [req.body.username])
+    ) {
+      return res.status(409).render("pages/auth/register", {
+        error: "Username taken",
+      });
+    }
 
-router.post("/register", async (req, res) => {
-  if (
-    typeof req.body.username != "string" ||
-    typeof req.body.password != "string"
-  ) {
-    return res.status(400).send("Bad Request");
-  }
+    const hash = await bcrypt.hash(req.body.password, 10);
+    const token = randomBytes(48).toString("base64url");
 
-  if (!req.body.username.match(/^[a-z0-9_-]{3,32}$/)) {
-    return res.status(400).render("pages/auth/register", {
-      error: "Username validation failed",
-    });
-  }
+    await exec$("insert into users values (default, $1, $2, $3, $4)", [
+      req.body.username,
+      hash,
+      token,
+      Date.now(),
+    ]);
 
-  if (config.blacklisted_usernames.includes(req.body.username)) {
-    return res.status(400).render("pages/auth/register", {
-      error: "You cannot use that username",
-    });
-  }
+    res
+      .cookie("token", token, {
+        maxAge: 365 * 24 * 3600 * 1000,
+      })
+      .redirect("/");
+  })
+  .post("/changepass", async (req, res) => {
+    if (
+      typeof req.body.oldpass != "string" ||
+      typeof req.body.newpass != "string"
+    ) {
+      return res.status(400).send("Bad Request");
+    }
 
-  if (
-    await fetch$("select 1 from users where username=$1", [req.body.username])
-  ) {
-    return res.status(409).render("pages/auth/register", {
-      error: "Username taken",
-    });
-  }
+    if (req.body.newpass != req.body.newpassconfirm) {
+      return res.render("pages/auth/changepass", {
+        error: "New password confirmation does not match",
+      });
+    }
 
-  const hash = await bcrypt.hash(req.body.password, 10);
-  const token = randomBytes(48).toString("base64url");
+    const user = await fetch$("select * from users where token=$1", [
+      req.cookies.token,
+    ]);
+    if (!user) {
+      return res.status(401).send("Unauthorized");
+    }
 
-  await exec$("insert into users values (default, $1, $2, $3, $4)", [
-    req.body.username,
-    hash,
-    token,
-    Date.now(),
-  ]);
+    const hash = await bcrypt.hash(req.body.newpass, 10);
+    const token = randomBytes(48).toString("base64url");
 
-  res
-    .cookie("token", token, {
-      maxAge: 365 * 24 * 3600 * 1000,
-    })
-    .redirect("/");
-});
+    await exec$(
+      "update users set token=$1, password_hash=$2, changepass=false where id=$3",
+      [token, hash, user.id],
+    );
 
-router.post("/changepass", async (req, res) => {
-  if (
-    typeof req.body.oldpass != "string" ||
-    typeof req.body.newpass != "string"
-  ) {
-    return res.status(400).send("Bad Request");
-  }
-
-  if (req.body.newpass != req.body.newpassconfirm) {
-    return res.render("pages/auth/changepass", {
-      error: "New password confirmation does not match",
-    });
-  }
-
-  const user = await fetch$("select * from users where token=$1", [
-    req.cookies.token,
-  ]);
-  if (!user) {
-    return res.status(401).send("Unauthorized");
-  }
-
-  const hash = await bcrypt.hash(req.body.newpass, 10);
-  const token = randomBytes(48).toString("base64url");
-
-  await exec$(
-    "update users set token=$1, password_hash=$2, changepass=false where id=$3",
-    [token, hash, user.id],
-  );
-
-  return res
-    .cookie("token", token, {
-      maxAge: 365 * 24 * 3600 * 1000,
-    })
-    .redirect("/");
-});
+    return res
+      .cookie("token", token, {
+        maxAge: 365 * 24 * 3600 * 1000,
+      })
+      .redirect("/");
+  });

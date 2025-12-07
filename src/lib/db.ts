@@ -1,14 +1,17 @@
 import config from "../../config.json" assert { type: "json" };
-import { readFile } from "node:fs/promises";
-import * as pg from "pg";
 
-export const pool = new pg.Pool(config.database);
+export const db = new Bun.SQL({
+  adapter: "postgres",
+  username: config.database.user,
+  password: config.database.password,
+  database: config.database.database,
+});
 
 export async function exec$(
   query: string,
   values: unknown[] = [],
 ): Promise<any[]> {
-  return (await pool.query(query, values)).rows;
+  return (await db.unsafe(query, values)).rows;
 }
 
 export async function fetch$(query: string, values: unknown[] = []) {
@@ -16,5 +19,5 @@ export async function fetch$(query: string, values: unknown[] = []) {
 }
 
 export async function initDatabase() {
-  await exec$(await readFile("data/setup.psql", "utf-8"));
+  await db.file("data/setup.psql");
 }

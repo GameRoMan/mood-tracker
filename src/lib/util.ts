@@ -1,13 +1,5 @@
-import { init as initCuid2 } from "@paralleldrive/cuid2";
 import { DEFAULT_MOODS } from "./constants";
 import { fetch$ } from "./db";
-import crypto from "node:crypto";
-
-export const createId = initCuid2({
-  random: () => crypto.randomInt(281474976710655) / 281474976710655,
-  length: 16,
-  fingerprint: "mood-tracker",
-});
 
 export function moodInfo(
   pleasantness: number,
@@ -41,12 +33,6 @@ export function moodInfo(
               : 5;
 
   return moods[moodRow * 6 + moodColumn];
-}
-
-export function safeParseURL(url) {
-  try {
-    return new URL(url);
-  } catch {}
 }
 
 export async function fetchMood(user) {

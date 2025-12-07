@@ -2,7 +2,9 @@ import { fromZodError } from "zod-validation-error";
 import { fetch$ } from "~/lib/db";
 import { z } from "zod";
 
-export function auth(scope) {
+type Scope = string & {};
+
+export function auth(scope?: Scope) {
   return async function (req, res, next) {
     if (
       req.headers.authorization &&

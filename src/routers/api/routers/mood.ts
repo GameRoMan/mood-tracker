@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { Elysia } from "elysia";
 
-export const router = new Elysia()
+export const router = new Elysia({ prefix: "/mood" })
   .get("/:user?", auth("mood.read"), async (req, res) => {
     res.json({
       status: "ok",
