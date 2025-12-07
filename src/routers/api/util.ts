@@ -1,8 +1,10 @@
 import { fromZodError } from "zod-validation-error";
-import { fetch$ } from "../../db.js";
+import { fetch$ } from "~/lib/db";
 import { z } from "zod";
 
-export function auth(scope) {
+type Scope = string & {};
+
+export function auth(scope?: Scope) {
   return async function (req, res, next) {
     if (
       req.headers.authorization &&
@@ -53,27 +55,6 @@ export function auth(scope) {
 
     next();
   };
-}
-
-export async function appAuth(req, res, next) {
-  if (!req.body.client_id || !req.body.client_secret) {
-    return res.status(400).send({
-      error: "invalid_client",
-    });
-  }
-
-  req.app = await fetch$("select * from apps where id=$1 and secret=$2", [
-    req.body.client_id,
-    req.body.client_secret,
-  ]);
-
-  if (!req.app) {
-    res.status(401).send({
-      error: "invalid_client",
-    });
-  } else {
-    next();
-  }
 }
 
 export function validateBody(shape, error = null) {
