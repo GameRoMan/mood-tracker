@@ -1,20 +1,12 @@
-import { router as appRouter } from "./routers/app.js";
-import { router as apiRouter } from "./routers/api/index.js";
-import { router as authRouter } from "./routers/auth.js";
-import { router as settingsRouter } from "./routers/settings.js";
+import { router as appRouter } from "./routers/app";
+import { router as apiRouter } from "./routers/api";
+import { router as authRouter } from "./routers/auth";
+import { router as settingsRouter } from "./routers/settings";
 
 import { Elysia } from "elysia";
 
-const router = new Elysia()
-  .onError(({ code, status }) => {
-    if (code === "NOT_FOUND") {
-      status(404); //.render("pages/error/404")
-    }
-    status(500); //.render("pages/error/500");
-  })
+export const router = new Elysia()
   .use("/", appRouter)
   .use("/api", apiRouter)
   .use("/auth", authRouter)
   .use("/settings", settingsRouter);
-
-export { router };
