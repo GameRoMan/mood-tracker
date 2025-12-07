@@ -22,8 +22,8 @@ process.on("uncaughtException", (e) => console.error(e));
 process.on("unhandledRejection", (e) => console.error(e));
 
 app.listen(config.port, async () => {
-  await initDatabase();
-  await initTasks();
+  // await initDatabase();
+  // await initTasks();
 
   console.log(`Listening on :${config.port}`);
 });

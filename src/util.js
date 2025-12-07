@@ -1,7 +1,7 @@
 import { init as initCuid2 } from "@paralleldrive/cuid2";
 import { DEFAULT_MOODS } from "./const.js";
 import { fetch$ } from "./db.js";
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 export const createId = initCuid2({
   random: () => crypto.randomInt(281474976710655) / 281474976710655,

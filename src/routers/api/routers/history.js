@@ -12,7 +12,7 @@ router.get(
     sort: z.enum(["newest", "oldest"]).optional(),
     minimized: z.enum(["true", "false"]).optional()
   }),
-  async (req, res, next) => {
+  async (req, res) => {
     const sort = (
       req.query.sort == "newest"
         ? "desc"

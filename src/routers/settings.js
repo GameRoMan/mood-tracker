@@ -4,7 +4,7 @@ import { exec$, fetch$ } from "../db.js";
 import { createId } from "../util.js";
 import { getAuth } from "./auth.js";
 import express from "express";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { z } from "zod";
 
 export const router = express.Router();

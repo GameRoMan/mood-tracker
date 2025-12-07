@@ -8,7 +8,7 @@ export const router = express.Router();
 
 router.get(
   "/:user?", auth("mood.read"),
-  async (req, res, next) => {
+  async (req, res) => {
     res.json({
       status: "ok",
       mood: await fetchMood(req.user)

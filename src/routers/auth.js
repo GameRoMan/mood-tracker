@@ -1,6 +1,6 @@
 import config from "../../config.json" assert { type: "json" };
 import { exec$, fetch$ } from "../db.js";
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 import express from "express";
 import bcrypt from "bcrypt";
 

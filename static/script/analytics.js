@@ -142,7 +142,7 @@ window.addEventListener("load", async () => {
         dots.appendChild(dot);
       }
     } else if (htype.value == "heatmap") {
-      const moods = new Array(labels.length).fill(0);
+      const moods = Array.from({ length: labels.length }).fill(0);
       for (const entry of entries) {
         moods[moodInfo(entry.pleasantness, entry.energy)]++;
       }

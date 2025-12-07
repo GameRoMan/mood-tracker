@@ -17,7 +17,7 @@ router.use("/oauth2", oauth2Router);
 router.use("/history", historyRouter);
 router.use("/metrics", prometheusRouter);
 
-router.use((req, res, next) => {
+router.use((req, res) => {
   res.status(404).json({
     status: "error",
     message: "Route not found"

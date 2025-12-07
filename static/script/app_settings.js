@@ -33,7 +33,7 @@ document.addEventListener("click", async (e) => {
     } else {
       try {
         new URL(uri);
-      } catch (err) {
+      } catch {
         return alert("Invalid redirect URI");
       }
 
