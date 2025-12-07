@@ -1,10 +1,10 @@
 import config from "../../config.json" assert { type: "json" };
+
 import { exec$, fetch$ } from "~/lib/db";
 import { randomBytes } from "node:crypto";
-import express from "express";
 import bcrypt from "bcrypt";
 
-export const router = express.Router();
+import { Elysia } from "elysia";
 
 export function getAuth(required = false) {
   return async function (req, res, next) {
@@ -23,6 +23,8 @@ export function getAuth(required = false) {
     }
   };
 }
+
+export const router = new Elysia({ prefix: "/auth" });
 
 router.get("/login", (req, res) => res.render("pages/auth/login"));
 router.get("/register", (req, res) => res.render("pages/auth/register"));
@@ -129,7 +131,7 @@ router.post("/changepass", async (req, res) => {
     [token, hash, user.id],
   );
 
-  res
+  return res
     .cookie("token", token, {
       maxAge: 365 * 24 * 3600 * 1000,
     })

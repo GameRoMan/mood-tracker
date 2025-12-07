@@ -1,12 +1,11 @@
 import { auth, validateBody, validateQuery } from "../util";
 import { exec$ } from "~/lib/db";
-import express from "express";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 
-export const router = express.Router();
+import { Elysia } from "elysia";
 
-router.get(
+export const router = new Elysia().get(
   "/all/:user?",
   auth("history.read"),
   validateQuery({

@@ -1,10 +1,9 @@
 import { fetchMood } from "~/lib/util";
 import { exec$ } from "~/lib/db";
-import express from "express";
 
-export const router = express.Router();
+import { Elysia } from "elysia";
 
-router.get("/", async (req, res) => {
+export const router = new Elysia().get("/", async (req, res) => {
   // TODO: show metrics for the API as well? (memory usage, uptime etc)
 
   if (!req.query.users) {

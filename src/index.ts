@@ -6,7 +6,7 @@ import { router as settingsRouter } from "./routers/settings";
 import { Elysia } from "elysia";
 
 export const router = new Elysia()
-  .use("/", appRouter)
-  .use("/api", apiRouter)
-  .use("/auth", authRouter)
-  .use("/settings", settingsRouter);
+  .use(appRouter)
+  .use(apiRouter)
+  .use(authRouter)
+  .use(settingsRouter);
