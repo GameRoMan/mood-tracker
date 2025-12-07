@@ -1,15 +1,17 @@
-import config from "../config.json" assert { type: "json" };
+import config from "../../config.json" assert { type: "json" };
 import { readFile } from "node:fs/promises";
 import pg from "pg";
 
 export const pool = new pg.Pool(config.database);
 
-/** @returns {Promise<any[]>} */
-export async function exec$(query, values = []) {
+export async function exec$(
+  query: string,
+  values: unknown[] = [],
+): Promise<any[]> {
   return (await pool.query(query, values)).rows;
 }
 
-export async function fetch$(query, values = []) {
+export async function fetch$(query: string, values: unknown[] = []) {
   return (await exec$(query, values))[0];
 }
 

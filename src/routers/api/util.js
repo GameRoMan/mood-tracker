@@ -1,5 +1,5 @@
 import { fromZodError } from "zod-validation-error";
-import { fetch$ } from "../../db.js";
+import { fetch$ } from "~/lib/db";
 import { z } from "zod";
 
 export function auth(scope) {

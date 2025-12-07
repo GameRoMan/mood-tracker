@@ -13,5 +13,11 @@
     "pg": "^8.16.3",
     "zod": "^4.1.13",
     "zod-validation-error": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6",
+    "@types/pg": "^8.15.6"
   }
 }

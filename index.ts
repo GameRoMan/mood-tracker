@@ -1,20 +1,21 @@
 import config from "./config.json" assert { type: "json" };
 import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
+import {
+  urlencoded as bodyParser_urlencoded,
+  json as bodyParser_json,
+} from "body-parser";
 import express from "express";
 
 import "express-async-errors";
 
-import { initDatabase } from "./src/db.js";
-import { initTasks } from "./src/tasks.js";
-import { router } from "./src/index.js";
+import { initDatabase } from "~/lib/db";
+import { initTasks } from "~/lib/tasks";
+import { router } from "~/.";
 
 const app = express();
 
-app.set("view engine", "ejs");
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ strict: true }));
+app.use(bodyParser_urlencoded({ extended: true }));
+app.use(bodyParser_json({ strict: true }));
 app.use(cookieParser());
 app.use("/", router);
 
