@@ -1,5 +1,5 @@
 import { DEFAULT_MOODS, DEFAULT_COLORS } from "~/lib/constants";
-import { exec$, fetch$ } from "~/lib/db";
+import { fetch$ } from "~/lib/db";
 import { fetchMood } from "~/lib/util";
 import { getAuth } from "./auth";
 
