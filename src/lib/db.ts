@@ -1,6 +1,6 @@
 import config from "../../config.json" assert { type: "json" };
 import { readFile } from "node:fs/promises";
-import pg from "pg";
+import * as pg from "pg";
 
 export const pool = new pg.Pool(config.database);
 

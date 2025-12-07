@@ -1,24 +1,20 @@
-import errorComments from "../data/error-comments.json" assert { type: "json" };
-import express from "express";
-
-import { router as settingsRouter } from "./routers/settings.js";
+import { router as appRouter } from "./routers/app.js";
 import { router as apiRouter } from "./routers/api/index.js";
 import { router as authRouter } from "./routers/auth.js";
-import { router as appRouter } from "./routers/app.js";
+import { router as settingsRouter } from "./routers/settings.js";
 
-export const router = express.Router();
+import { Elysia } from "elysia";
 
-router.use("/static", express.static("static"));
+const router = new Elysia()
+  .onError(({ code, status }) => {
+    if (code === "NOT_FOUND") {
+      status(404); //.render("pages/error/404")
+    }
+    status(500); //.render("pages/error/500");
+  })
+  .use("/", appRouter)
+  .use("/api", apiRouter)
+  .use("/auth", authRouter)
+  .use("/settings", settingsRouter);
 
-router.use("/", appRouter);
-router.use("/api", apiRouter);
-router.use("/auth", authRouter);
-router.use("/settings", settingsRouter);
-
-router.use((req, res) => res.status(404).render("pages/error/404"));
-router.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).render("pages/error/500", {
-    comment: errorComments[Math.floor(Math.random() * errorComments.length)],
-  });
-});
+export { router };

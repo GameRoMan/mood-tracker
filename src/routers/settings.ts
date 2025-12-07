@@ -1,8 +1,8 @@
 import { DEFAULT_COLORS, DEFAULT_MOODS, OAUTH_SCOPES } from "~/lib/constants";
-import { validateBody } from "./api/util.js";
-import { exec$, fetch$ } from "../db.js";
-import { createId } from "../util.js";
-import { getAuth } from "./auth.js";
+import { validateBody } from "./api/util";
+import { exec$, fetch$ } from "../db";
+import { createId } from "../util";
+import { getAuth } from "./auth";
 import express from "express";
 import crypto from "node:crypto";
 import { z } from "zod";
@@ -111,7 +111,7 @@ router.post(
     ]);
 
     res.cookie("new_app_secret", secret);
-    res.redirect(`/settings/api/app/${id}`);
+    return res.redirect(`/settings/api/app/${id}`);
   },
 );
 
