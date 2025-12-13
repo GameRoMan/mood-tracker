@@ -442,11 +442,7 @@ hr {
   max-width: 94px;
   height: 94px;
   background-color: var(--color);
-  background-image: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.6),
-    rgba(0, 0, 0, 0.6)
-  );
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
   color: #fff;
   display: grid;
   user-select: none;

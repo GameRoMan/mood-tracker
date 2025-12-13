@@ -57,9 +57,7 @@ window.addEventListener("load", () => {
   });
 
   moment.locale(navigator.userLanguage || navigator.language);
-  const lastUpdate = parseInt(
-    status_last_update.getAttribute("data-timestamp"),
-  );
+  const lastUpdate = parseInt(status_last_update.getAttribute("data-timestamp"));
   if (lastUpdate) {
     status_last_update.textContent = moment(lastUpdate).calendar();
   }
