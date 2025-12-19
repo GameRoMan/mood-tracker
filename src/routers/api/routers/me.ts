@@ -98,6 +98,7 @@ export const router = new Elysia({ prefix: "/me" })
         req.user.custom_labels = req.body.custom_labels.map(
           (x, i) =>
             x
+              // oxlint-disable-next-line no-control-regex : this is intended
               .replace(/[^\u0000-\u00FF]/g, "?")
               .replace(/\n/g, "")
               .replace(/\s+/g, " ")
