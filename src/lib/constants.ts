@@ -1,12 +1,14 @@
+// prettier-ignore
 export const DEFAULT_MOODS = [
-  "Ecstatic", "Festive", "Manic", "Shocked", "Angry", "Enraged",
-  "Excited", "Motivated", "Energized", "Restless", "Stressed", "Fuming",
-  "Blissful", "Cheerful", "Pleasant", "Uneasy", "Worried", "Anxious",
-  "Fulfilled", "Content", "At ease", "Apathetic", "Lonely", "Scared",
-  "Satisfied", "Restful", "Relaxed", "Tired", "Sad", "Miserable",
-  "Serene", "Tranquil", "Sleepy", "Drained", "Desolate", "Despair",
+  "Ecstatic",  "Festive",   "Manic",     "Shocked",   "Angry",    "Enraged",
+  "Excited",   "Motivated", "Energized", "Restless",  "Stressed", "Fuming",
+  "Blissful",  "Cheerful",  "Pleasant",  "Uneasy",    "Worried",  "Anxious",
+  "Fulfilled", "Content",   "At ease",   "Apathetic", "Lonely",   "Scared",
+  "Satisfied", "Restful",   "Relaxed",   "Tired",     "Sad",      "Miserable",
+  "Serene",    "Tranquil",  "Sleepy",    "Drained",   "Desolate", "Despair",
 ];
 
+// prettier-ignore
 export const DEFAULT_COLORS = [
   "#1c1c1c", "#2c2c2c", "#ffffff", "#888888",
   "#9b0b00", "#e64f22", "#fd5757", "#fe914b",
