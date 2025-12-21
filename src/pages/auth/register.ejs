@@ -14,6 +14,7 @@
       </div>
       <h1>Register</h1>
     </div>
+
     <form action="/auth/register" method="post">
       <label for="username">Username</label>
       <input name="username" id="username" type="text" placeholder="Username" minlength="3" maxlength="32" pattern="^[a-z0-9_-]{3,32}$" required>
@@ -30,6 +31,7 @@
     </form>
     <p class="gray">Already have an account? <a href="/auth/login" class="gray">Sign in</a></p>
   </main>
+
   <script>
     username.addEventListener("keyup", (e) => {
       e.target.value = e.target.value.replace(/\s/g, "_").toLowerCase();

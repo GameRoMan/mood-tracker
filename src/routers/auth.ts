@@ -5,48 +5,55 @@ import { randomBytes } from "node:crypto";
 import bcrypt from "bcrypt";
 
 import { Elysia } from "elysia";
+import * as z from "zod";
 
-export function getAuth(required = false) {
-  return async function (req, res, next) {
-    if (req.cookies.token) {
-      req.user = await fetch$("select * from users where token=$1", [req.cookies.token]);
-    }
-
-    if (required && !req.user) {
-      res.status(401).redirect("/auth/login");
-    } else if (req.user && req.user.changepass) {
-      res.render("pages/auth/changepass");
-    } else {
-      next();
-    }
-  };
-}
+export const authPlugin = new Elysia({ name: "auth" })
+  .macro({
+    user: {
+      async resolve({ cookie }) {
+        if (!cookie.token?.value) return { user: null };
+        const user = await fetch$("select * from users where token=$1", [cookie.token.value]);
+        return { user };
+      },
+    },
+  })
+  .macro("auth", {
+    user: true,
+    beforeHandle({ redirect, user }) {
+      if (!user) {
+        return redirect("/auth/login");
+      }
+      if (user?.changepass) {
+        return redirect("/auth/changepass");
+      }
+      return;
+    },
+  });
 
 export const router = new Elysia({ prefix: "/auth" })
-  .get("/login", (req, res) => res.render("pages/auth/login"))
-  .get("/register", (req, res) => res.render("pages/auth/register"))
-  .get("/logout", (req, res) => {
-    res.clearCookie("token").redirect("/");
+  .use(authPlugin)
+  .post("/logout", ({ cookie: { token }, redirect }) => {
+    token?.remove();
+    return redirect("/");
   })
-  .post("/login", async (req, res) => {
-    if (typeof req.body.username != "string" || typeof req.body.password != "string")
-      return res.status(400).send("Bad Request");
+  .post(
+    "/login",
+    async ({ redirect, cookie: { token }, body }) => {
+      const user = await fetch$("select * from users where username=$1", [body.username]);
 
-    const user = await fetch$("select * from users where username=$1", [req.body.username]);
+      if (!user || !(await bcrypt.compare(body.password, user.password_hash))) {
+        return res.status(403).render("pages/auth/login", {
+          error: "Invalid username or password",
+        });
+      }
 
-    if (!user || !(await bcrypt.compare(req.body.password, user.password_hash))) {
-      return res.status(403).render("pages/auth/login", {
-        error: "Invalid username or password",
-      });
-    }
+      token?.set({ value: user.token, maxAge: 365 * 24 * 3600 * 1000 });
 
-    res
-      .cookie("token", user.token, {
-        maxAge: 365 * 24 * 3600 * 1000,
-      })
-      .redirect("/");
-  })
-  .post("/register", async (req, res) => {
+      return redirect("/");
+    },
+    { body: z.object({ username: z.string(), password: z.string() }) },
+  )
+  .post("/register", async ({ redirect }) => {
     if (typeof req.body.username != "string" || typeof req.body.password != "string") {
       return res.status(400).send("Bad Request");
     }
@@ -79,13 +86,10 @@ export const router = new Elysia({ prefix: "/auth" })
       Date.now(),
     ]);
 
-    res
-      .cookie("token", token, {
-        maxAge: 365 * 24 * 3600 * 1000,
-      })
-      .redirect("/");
+    res.cookie("token", token, { maxAge: 365 * 24 * 3600 * 1000 });
+    return redirect("/");
   })
-  .post("/changepass", async (req, res) => {
+  .post("/changepass", async ({ redirect }) => {
     if (typeof req.body.oldpass != "string" || typeof req.body.newpass != "string") {
       return res.status(400).send("Bad Request");
     }
@@ -110,9 +114,6 @@ export const router = new Elysia({ prefix: "/auth" })
       user.id,
     ]);
 
-    return res
-      .cookie("token", token, {
-        maxAge: 365 * 24 * 3600 * 1000,
-      })
-      .redirect("/");
+    res.cookie("token", token, { maxAge: 365 * 24 * 3600 * 1000 });
+    return redirect("/");
   });

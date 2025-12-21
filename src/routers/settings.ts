@@ -1,5 +1,5 @@
 import { DEFAULT_COLORS, DEFAULT_MOODS } from "~/lib/constants";
-import { getAuth } from "./auth";
+import { authPlugin } from "./auth";
 
 import { Elysia } from "elysia";
 
@@ -10,7 +10,7 @@ const SETTING_CATEGORIES = {
 } as const;
 
 export const router = new Elysia({ prefix: "/settings" })
-  .use(getAuth(true))
+  .use(authPlugin)
   .use((req, res, next) => {
     res.locals.categories = SETTING_CATEGORIES;
     res.locals.user = {
