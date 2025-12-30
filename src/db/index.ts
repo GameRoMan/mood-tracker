@@ -1,4 +1,4 @@
-import config from "#config" assert { type: "json" };
+import config from "#config" with { type: "json" };
 
 import { drizzle } from "drizzle-orm/bun-sql";
 

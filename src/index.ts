@@ -5,7 +5,7 @@ import { router as apiRouter } from "./routers/api";
 import { router as authRouter } from "./routers/auth";
 import { router as settingsRouter } from "./routers/settings";
 
-import config from "../config.json" assert { type: "json" };
+import config from "../config.json" with { type: "json" };
 
 import { initDatabase } from "~/lib/db";
 import { initTasks } from "~/lib/tasks";

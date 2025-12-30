@@ -1,4 +1,4 @@
-import { exec$ } from "./db.js";
+import { exec$ } from "~/db";
 
 export async function cleanMoodHistory() {
   const users = await exec$(
