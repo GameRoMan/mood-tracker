@@ -1,12 +1,13 @@
-import { Elysia } from "elysia";
-
-import { DEFAULT_MOODS, DEFAULT_COLORS } from "~/lib/constants";
-import { db } from "~/db";
-import { fetchMood } from "~/lib/util";
-import { authPlugin } from "./auth";
 import { eq } from "drizzle-orm";
-import { users as usersTable } from "~/db/schema";
+import { Elysia } from "elysia";
 import * as z from "zod";
+
+import { db } from "~/db";
+import { users as usersTable } from "~/db/schema";
+import { DEFAULT_MOODS, DEFAULT_COLORS } from "~/lib/constants";
+import { fetchMood } from "~/lib/util";
+
+import { authPlugin } from "./auth";
 
 export const router = new Elysia()
   .use(authPlugin)

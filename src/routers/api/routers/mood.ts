@@ -1,9 +1,10 @@
-import { auth, validateBody } from "./util";
-import { exec$, fetch$ } from "~/db";
-import { fetchMood } from "~/lib/util";
+import { Elysia } from "elysia";
 import * as z from "zod";
 
-import { Elysia } from "elysia";
+import { exec$, fetch$ } from "~/db";
+import { fetchMood } from "~/lib/util";
+
+import { auth, validateBody } from "./util";
 
 export const router = new Elysia({ prefix: "/mood" })
   .get("/:user?", auth(), async (req, res) => {

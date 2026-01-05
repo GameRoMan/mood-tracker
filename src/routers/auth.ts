@@ -1,13 +1,12 @@
 import config from "#config" with { type: "json" };
-
-import { exec$, fetch$, db } from "~/db";
-import { randomBytes } from "node:crypto";
 import * as bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
-import { users as usersTable } from "~/db/schema";
-
 import { Elysia } from "elysia";
+import { randomBytes } from "node:crypto";
 import * as z from "zod";
+
+import { exec$, fetch$, db } from "~/db";
+import { users as usersTable } from "~/db/schema";
 
 export const authPlugin = new Elysia({ name: "auth" })
   .macro({

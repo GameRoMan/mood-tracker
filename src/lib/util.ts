@@ -1,5 +1,6 @@
-import { DEFAULT_MOODS } from "./constants";
 import { fetch$, type User } from "~/db";
+
+import { DEFAULT_MOODS } from "./constants";
 
 export function moodInfo(pleasantness: number, energy: number, moods = DEFAULT_MOODS) {
   const moodRow =

@@ -1,11 +1,12 @@
-import { DEFAULT_COLORS, DEFAULT_MOODS } from "~/lib/constants";
-import { auth, validateBody } from "./util";
-import { exec$, fetch$ } from "~/db";
-import { randomBytes } from "node:crypto";
 import bcrypt from "bcrypt";
+import { Elysia } from "elysia";
+import { randomBytes } from "node:crypto";
 import * as z from "zod";
 
-import { Elysia } from "elysia";
+import { exec$, fetch$ } from "~/db";
+import { DEFAULT_COLORS, DEFAULT_MOODS } from "~/lib/constants";
+
+import { auth, validateBody } from "./util";
 
 export const router = new Elysia({ prefix: "/me" })
   .get("/", auth(), (req, res) => {

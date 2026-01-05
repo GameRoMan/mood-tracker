@@ -1,8 +1,9 @@
-import { DEFAULT_COLORS, DEFAULT_MOODS } from "~/lib/constants";
-import { authPlugin } from "./auth";
-
 import { Elysia } from "elysia";
 import * as z from "zod";
+
+import { DEFAULT_COLORS, DEFAULT_MOODS } from "~/lib/constants";
+
+import { authPlugin } from "./auth";
 
 const SETTING_CATEGORIES = {
   account: "Account",

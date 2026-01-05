@@ -1,5 +1,4 @@
 import config from "#config" with { type: "json" };
-
 import { drizzle } from "drizzle-orm/bun-sql";
 
 import * as schema from "./schema";
@@ -24,5 +23,5 @@ export async function fetch$(query: string, values: unknown[] = []) {
 }
 
 export async function initDatabase() {
-  await client.file("data/setup.psql");
+  await client.file("./setup.psql");
 }

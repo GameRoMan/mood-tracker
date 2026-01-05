@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 
-import { fetchMood } from "~/lib/util";
 import { exec$ } from "~/db";
+import { fetchMood } from "~/lib/util";
 
 export const router = new Elysia({ prefix: "/metrics" }).get("/", async (req, res) => {
   if (!req.query.users) {

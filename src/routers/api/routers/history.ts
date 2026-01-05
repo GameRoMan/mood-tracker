@@ -1,9 +1,10 @@
-import { auth, validateBody, validateQuery } from "./util";
-import { exec$ } from "~/db";
 import bcrypt from "bcrypt";
+import { Elysia } from "elysia";
 import * as z from "zod";
 
-import { Elysia } from "elysia";
+import { exec$ } from "~/db";
+
+import { auth, validateBody, validateQuery } from "./util";
 
 export const router = new Elysia({ prefix: "/history" })
   .get(
