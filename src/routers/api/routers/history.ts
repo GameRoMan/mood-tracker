@@ -4,19 +4,13 @@ import * as z from "zod";
 
 import { exec$ } from "~/db";
 
-import { auth, validateBody, validateQuery } from "./util";
+import { auth } from "./util";
 
 export const router = new Elysia({ prefix: "/history" })
   .get(
     "/all/:user?",
-    auth(),
-    validateQuery({
-      sort: z.enum(["newest", "oldest"]).optional(),
-      minimized: z.enum(["true", "false"]).optional(),
-    }),
-    async (req, res) => {
-      const sort =
-        req.query.sort == "newest" ? "desc" : req.query.sort == "oldest" ? "asc" : "desc";
+    async ({ query }) => {
+      const sort = query.sort == "newest" ? "desc" : query.sort == "oldest" ? "asc" : "desc";
 
       const history = await exec$(
         `
@@ -34,7 +28,7 @@ export const router = new Elysia({ prefix: "/history" })
         energy: Math.floor(x.energy * 100) / 100,
       }));
 
-      if (req.query.minimized == "true") {
+      if (query.minimized) {
         res.json({
           status: "ok",
           entries: entries.map((x) => [x.timestamp, x.pleasantness, x.energy]),
@@ -46,15 +40,18 @@ export const router = new Elysia({ prefix: "/history" })
         });
       }
     },
+    {
+      auth,
+      query: z.object({
+        sort: z.enum(["newest", "oldest"]).optional(),
+        minimized: z.coerce.boolean().optional(),
+      }),
+    },
   )
   .delete(
     "/all",
-    auth(),
-    validateBody({
-      password: z.string(),
-    }),
-    async (req, res) => {
-      if (!(await bcrypt.compare(req.body.password, req.user.password_hash)))
+    async ({ body }) => {
+      if (!(await bcrypt.compare(body.password, req.user.password_hash)))
         return res.status(401).json({
           status: "error",
           message: "Passwords do not match",
@@ -64,18 +61,13 @@ export const router = new Elysia({ prefix: "/history" })
 
       return res.json({ status: "ok" });
     },
+    {
+      auth,
+      body: z.object({ password: z.string() }),
+    },
   )
   .get(
     "/:user?",
-    auth(),
-    validateQuery({
-      limit: z.coerce.number().int().min(0).max(100).optional(),
-      page: z.coerce.number().int().optional(),
-      before: z.coerce.number().int().positive().optional(),
-      after: z.coerce.number().int().positive().optional(),
-      sort: z.enum(["newest", "oldest"]).optional(),
-      minimized: z.enum(["true", "false"]).optional(),
-    }),
     async (req, res) => {
       const limit = parseInt(req.query.limit) || 25;
       const page = parseInt(req.query.page) || 0;
@@ -127,5 +119,16 @@ export const router = new Elysia({ prefix: "/history" })
           pages: pages,
         });
       }
+    },
+    {
+      auth,
+      query: z.object({
+        limit: z.coerce.number().int().min(0).max(100).optional(),
+        page: z.coerce.number().int().optional(),
+        before: z.coerce.number().int().positive().optional(),
+        after: z.coerce.number().int().positive().optional(),
+        sort: z.enum(["newest", "oldest"]).optional(),
+        minimized: z.enum(["true", "false"]).optional(),
+      }),
     },
   );

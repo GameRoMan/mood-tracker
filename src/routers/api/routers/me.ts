@@ -6,46 +6,30 @@ import * as z from "zod";
 import { exec$, fetch$ } from "~/db";
 import { DEFAULT_COLORS, DEFAULT_MOODS } from "~/lib/constants";
 
-import { auth, validateBody } from "./util";
+import { auth } from "./util";
 
 export const router = new Elysia({ prefix: "/me" })
-  .get("/", auth(), (req, res) => {
-    res.json({
-      username: req.user.username,
-      created_at: req.user.created_at,
-      total_mood_changes: null,
-      settings: {
-        custom_labels: req.user.custom_labels,
-        custom_colors: req.user.custom_colors,
-        custom_font_size: req.user.custom_font_size,
-        is_profile_private: req.user.is_profile_private,
-        is_history_private: req.user.is_profile_private || req.user.is_history_private,
-        history_threshold_days: req.user.history_threshold_days,
-      },
-    });
-  })
+  .get(
+    "/",
+    (req, res) => {
+      res.json({
+        username: req.user.username,
+        created_at: req.user.created_at,
+        total_mood_changes: null,
+        settings: {
+          custom_labels: req.user.custom_labels,
+          custom_colors: req.user.custom_colors,
+          custom_font_size: req.user.custom_font_size,
+          is_profile_private: req.user.is_profile_private,
+          is_history_private: req.user.is_profile_private || req.user.is_history_private,
+          history_threshold_days: req.user.history_threshold_days,
+        },
+      });
+    },
+    { auth },
+  )
   .patch(
     "/",
-    auth(),
-    validateBody({
-      username: z
-        .string()
-        .regex(/^[a-z0-9_-]+$/, "Username contains invalid characters!")
-        .min(3)
-        .max(32)
-        .optional(),
-      new_password: z.string().min(1).optional(),
-      confirm_password: z.string().min(1).optional(),
-      is_profile_private: z.boolean().optional(),
-      is_history_private: z.boolean().optional(),
-      custom_font_size: z.enum(["biggest", "big", "normal", "small", "smallest"]).optional(),
-      custom_colors: z
-        .array(z.number().int().min(0).max(0xffffff))
-        .length(DEFAULT_COLORS.length)
-        .optional(),
-      custom_labels: z.array(z.string().min(1).max(53)).length(DEFAULT_MOODS.length).optional(),
-      history_threshold_days: z.number().int().min(-1).max(365).optional(),
-    }),
     async (req, res) => {
       if (
         (req.body.username || req.body.new_password) &&
@@ -140,13 +124,31 @@ export const router = new Elysia({ prefix: "/me" })
         status: "ok",
       });
     },
+    {
+      auth,
+      body: z.object({
+        username: z
+          .string()
+          .regex(/^[a-z0-9_-]+$/, "Username contains invalid characters!")
+          .min(3)
+          .max(32)
+          .optional(),
+        new_password: z.string().min(1).optional(),
+        confirm_password: z.string().min(1).optional(),
+        is_profile_private: z.boolean().optional(),
+        is_history_private: z.boolean().optional(),
+        custom_font_size: z.enum(["biggest", "big", "normal", "small", "smallest"]).optional(),
+        custom_colors: z
+          .array(z.number().int().min(0).max(0xffffff))
+          .length(DEFAULT_COLORS.length)
+          .optional(),
+        custom_labels: z.array(z.string().min(1).max(53)).length(DEFAULT_MOODS.length).optional(),
+        history_threshold_days: z.number().int().min(-1).max(365).optional(),
+      }),
+    },
   )
   .delete(
     "/",
-    auth(),
-    validateBody({
-      password: z.string(),
-    }),
     async (req, res) => {
       if (!(await bcrypt.compare(req.body.password, req.user.password_hash))) {
         return res.status(401).json({
@@ -161,5 +163,9 @@ export const router = new Elysia({ prefix: "/me" })
       res.json({
         status: "ok",
       });
+    },
+    {
+      auth,
+      body: z.object({ password: z.string() }),
     },
   );
